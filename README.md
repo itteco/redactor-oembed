@@ -1,4 +1,16 @@
-# Redactor iframely plugin
+# Iframely plugin for Redactor
+
+## About
+
+This is a plugin for [Imperavi's Redactor](http://imperavi.com/redactor) editor that allows rich media and image embeds via [Iframely gateway](https://github.com/iframely) endpoint.
+
+Please, get your own copy of [Iframely](http://github.com/itteco/iframely) and point this plugin to your own endpoint before launching it into production. The endpoint configured in this plugin by default is Iframely's community endpoint.
+
+## Demo
+
+Please, see demo at [Demo Url](demourl)
+
+## Sample & Config
 
 Example plugin setup configuration (except usual things):
 
@@ -40,3 +52,11 @@ Plugin modal form html code:
             <a href="#" class="redactor_modal_btn redactor_btn_modal_close">Close</a>
         </footer>
     </div>
+
+Please, change all links to Redactor and Iframely to your own hosted versions. The links given here are just for demo purposes.
+
+## License & Contributing
+
+This plugin is licensed under MIT. [Iframely gateway](https://github.com/itteco/iframely) and [Imperavi's Redactor](http://imperavi.com/redactor) have their own licenses.
+
+Feel free to submit an issue or fork and submit pull-requests with enhancements or fixes.
