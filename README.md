@@ -8,7 +8,7 @@ Please, get your own copy of [Iframely](http://github.com/itteco/iframely) and p
 
 ## Demo
 
-Please, see demo at [Demo Url](demourl)
+Please, see demo at [Demo Url](http://itteco.github.io/redactor-iframely-plugin/)
 
 ## Sample & Config
 
