@@ -4,7 +4,7 @@ RedactorPlugins.iframely = {
 
     init: function() {
 
-        this.buttonAdd('video', 'iframely', function() {
+        this.buttonAdd('iframely', 'iframely', function() {
             this.modalInit('iframely', '#iframelyModal', 800, $.proxy(this.initForm, this));
         });
     },
