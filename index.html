@@ -47,11 +47,25 @@
             width: 940px;
             margin: 50px auto;
         }
+        #page>h1, #page>h2, #page>p {
+            text-align: center;
+        }
+        #page>p {
+            padding: 10px;
+        }
+        #page>p.links>a {
+            color: red;
+        }
     </style>
 
 </head>
 <body>
 <div id="page">
+
+    <h1>Demo - Iframely plugin for Redactor.</h1>
+    <h2>Add rich media embeds.</h2>
+    <p>Choose '<>' and enter the link in the dialog. Like YouTube video, etc.</p>
+
     <textarea id="redactor" name="content" style="width: 99%; height: 400px;">
         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
     </textarea>
@@ -69,6 +83,14 @@
             <a href="#" class="redactor_modal_btn redactor_btn_modal_close">Close</a>
         </footer>
     </div>
+
+    <p class="links">
+        <a href="https://github.com/itteco/redactor-iframely-plugin">Get plugin</a>
+        &nbsp;|&nbsp;
+        <a href="https://github.com/itteco/iframely">Get Iframely</a>
+        &nbsp;|&nbsp;
+        <a href="http://imperavi.com/redactor">Get Redactor</a>
+    </p>
 
 </div>
 </body>
