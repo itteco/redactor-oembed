@@ -47,12 +47,24 @@ RedactorPlugins.iframely = {
 
         this.$result.html("Loading...");
 
-        $.iframely.getPageData(uri, function(error, data) {
+        $.iframely.defaults.endpoint = '//iframe.ly/api/iframely';
+
+        $.iframely.getPageData(uri, {
+            origin: 'redactor',
+            api_key: '416cc19fe9a30033731f9fd97b2e1f66',
+            url: true
+        }, function(error, data) {
 
             if (error) {
                 that.$result.html('Error loading embeds.');
                 return;
             }
+
+            var links = [];
+            for(var key in data.links) {
+                links = links.concat(data.links[key]);
+            }
+            data.links = links;
 
             var embeddables = data.links.filter(function(link) {
                 return link.rel.indexOf('player') > -1 || link.rel.indexOf('image') > -1;
