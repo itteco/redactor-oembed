@@ -2,13 +2,11 @@
 
 ## About
 
-This is a plugin for [Imperavi's Redactor](http://imperavi.com/redactor) editor that allows rich media and image embeds via [Iframely gateway](https://github.com/iframely) endpoint.
-
-Please, get your own copy of [Iframely](http://github.com/itteco/iframely) and point this plugin to your own endpoint before launching it into production. The endpoint configured in this plugin by default is Iframely's community endpoint.
+This is a plugin for [Imperavi's Redactor](http://imperavi.com/redactor) editor that allows rich media and image embeds via oEmbed with default API at [Iframely](http://iframely.com) endpoint. As a bonus, Iframely also gives the responsive embed codes for over 1500 domains.
 
 ## Demo
 
-Please, see demo at [http://itteco.github.io/redactor-oembed/](http://itteco.github.io/redactor-oembed/)
+Please, see demo at [http://iframely.com/demo/redactor](http://iframely.com/demo/redactor)
 
 ## Sample & Config
 
@@ -57,6 +55,6 @@ Please, change all links to Redactor and Iframely to your own hosted versions. T
 
 ## License & Contributing
 
-This plugin is licensed under MIT. [Iframely gateway](https://github.com/itteco/iframely) and [Imperavi's Redactor](http://imperavi.com/redactor) have their own licenses.
+This plugin is licensed under MIT. [Imperavi's Redactor](http://imperavi.com/redactor) has own license.
 
 Feel free to submit an issue or fork and submit pull-requests with enhancements or fixes.
