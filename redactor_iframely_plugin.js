@@ -4,90 +4,60 @@ RedactorPlugins.iframely = {
 
     init: function() {
 
-        this.buttonAdd('iframely', 'iframely', function() {
-            this.modalInit('iframely', '#iframelyModal', 800, $.proxy(this.initForm, this));
+        var that = this;
+
+        var urlRe = /^\s*(https?:\/\/[^ \/,"]+\/[^ ,"]+)\s*$/i;
+
+        this.$editor.on('keyup', function(e) {
+            if (e.keyCode === 13) {
+                var current = that.getCurrent();
+
+                if (current.nodeType === 3) {
+                    current = current.parentNode;
+                }
+
+                var prev = current.previousSibling;
+                if (!prev) {
+                    return;
+                }
+                if (prev.getAttribute && prev.getAttribute('parsed-iframely-link')) {
+                    return;
+                }
+                var text = prev.textContent;
+                if (!text) {
+                    return;
+                }
+                var m = text.match(urlRe);
+                if (m) {
+                    prev.setAttribute('parsed-iframely-link', '1');
+                    that.fetchUrl(m[1], prev);
+                }
+            }
         });
     },
 
-    initForm: function() {
+    fetchUrl: function(uri, node) {
 
         var that = this;
 
-        this.selectionSave();
-        this.bufferSet();
+        $.ajax({
+            url: 'https://iframely.com/oembed',
+            dataType: "json",
+            data: {
+                url: uri,
+                iframe: true
+            },
+            success: function(data, textStatus, jqXHR) {
 
-        this.$input = $('#redactor_modal input').focus();
-        this.$result = $('#redactor_modal .results').html('');
+                if (data && data.html) {
+                    that.insertHtmlAdvanced(data.html);
+                }
 
-        this.$input.keypress(function(e) {
-            if (e.keyCode == "13") {
-                that.fetchUrl();
+                node && node.parentNode && node.parentNode.removeChild(node);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.error(jqXHR && jqXHR.responseText || textStatus);
             }
         });
-
-        $('#redactor_modal .iframely_form button').click(function() {
-            that.fetchUrl();
-        });
-
-        $('#redactor_modal .results').on("click", "button", function() {
-            var html = $(this).data('embedCode');
-            that.insertWidget(html);
-        });
-    },
-
-    fetchUrl: function() {
-
-        var that = this;
-
-        var uri = this.$input.val();
-
-        if (!uri) {
-            return;
-        }
-
-        this.$result.html("Loading...");
-
-        $.iframely.getPageData(uri, function(error, data) {
-
-            if (error) {
-                that.$result.html('Error loading embeds.');
-                return;
-            }
-
-            var embeddables = data.links.filter(function(link) {
-                return link.rel.indexOf('player') > -1 || link.rel.indexOf('image') > -1;
-            });
-
-            if (embeddables.length == 0) {
-                that.$result.html('No embeddable data found on this page.');
-                return;
-            }
-
-            that.renderLink(embeddables[0]);
-        });
-    },
-
-    renderLink: function(link) {
-
-        var $result = this.$result;
-
-        $result.html('');
-
-        var $el = $.iframely.generateLinkElement(link);
-
-        if ($el) {
-            var $div = $('<div/>');
-
-            $div.append($('<div/>').addClass("insert").append($('<button />').data('embedCode', $('<div/>').append($el).html()).html("Insert this:")))
-            $div.append($el);
-
-            $result.append($div);
-        }
-    },
-
-    insertWidget: function(html) {
-        this.selectionRestore();
-        this.insertHtml($.trim(html));
-        this.modalClose();
     }
 };
