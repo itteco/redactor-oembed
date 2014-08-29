@@ -6,7 +6,7 @@ This is a plugin for [Imperavi's Redactor](http://imperavi.com/redactor) editor 
 
 ## Demo
 
-Please, see demo at [http://iframely.com/demo/redactor](http://iframely.com/demo/editor)
+Please, see demo at [http://iframely.com/demo/editor](http://iframely.com/demo/editor)
 
 ## Sample & Config
 
