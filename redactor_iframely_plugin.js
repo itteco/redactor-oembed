@@ -41,7 +41,7 @@ RedactorPlugins.iframely = {
         var that = this;
 
         $.ajax({
-            url: 'https://iframely.com/oembed',
+            url: 'http://medium.iframe.ly/api/oembed',
             dataType: "json",
             data: {
                 url: uri,
