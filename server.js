@@ -12,4 +12,6 @@ require('http').createServer(function (request, response) {
         //
         file.serve(request, response);
     }).resume();
-}).listen(8080);
+}).listen(8082);
+
+console.log('http://localhost:8082/index.html');
