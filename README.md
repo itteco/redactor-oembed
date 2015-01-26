@@ -25,33 +25,19 @@ Example plugin setup configuration (except usual things):
 
     <!-- Call Redactor -->
     <script type="text/javascript">
-
-        // Setup your iframely endpoint path. The sample is given for cloud version
-        $.iframely.defaults.endpoint = 'http://iframe.ly/api/oembed?api_key={YOUR API KEY HERE}';
-
         $(document).ready(function() {
             $('#redactor').redactor({
                 focus: true,
-                plugins: ['iframely']
+                plugins: ['iframely'],
+
+                // Disable trunc links.
+                linkSize: 1000,
+
+                // Setup your iframely endpoint path. The sample is given for cloud version
+                oembedEndpoint: 'http://iframe.ly/api/oembed?api_key={YOUR API KEY HERE}'
             });
         });
     </script>
-
-Plugin modal form html code:
-
-    <!-- iframely Modal HTML -->
-    <div id="iframelyModal" style="display: none;">
-        <section class="iframely_box">
-            <div class="iframely_form">
-                <input type="uri" placeholder="enter URI"><button>preview</button>
-            </div>
-            <div class="results">
-            </div>
-        </section>
-        <footer>
-            <a href="#" class="redactor_modal_btn redactor_btn_modal_close">Close</a>
-        </footer>
-    </div>
 
 Please, change all links to Redactor and Iframely to your own values. The links given here are just for demo purposes.
 

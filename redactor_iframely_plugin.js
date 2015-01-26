@@ -44,7 +44,7 @@ RedactorPlugins.iframely = function() {
             var that = this;
 
             $.ajax({
-                url: 'http://open.iframe.ly/api/oembed',
+                url: this.opts.oembedEndpoint || 'http://open.iframe.ly/api/oembed',
                 dataType: "json",
                 data: {
                     url: uri,
