@@ -44,16 +44,18 @@ RedactorPlugins.iframely = function() {
             var that = this;
 
             $.ajax({
-                url: 'http://medium.iframe.ly/api/oembed',
+                url: this.opts.oembedEndpoint || 'http://open.iframe.ly/api/oembed',
                 dataType: "json",
                 data: {
                     url: uri,
-                    iframe: true
+                    origin: 'redactor'
                 },
                 success: function(data, textStatus, jqXHR) {
 
                     if (data && data.html) {
                         that.insert.html(data.html, false);
+                    } else if (data && !data.html && data.type === 'photo' && data.url) {
+                        that.insert.html('<img src="' + data.url + '" title="' + (data.title || data.url)  + '" alt="' + (data.title || data.url)  + '" />', false);
                     }
 
                     node && node.parentNode && node.parentNode.removeChild(node);
