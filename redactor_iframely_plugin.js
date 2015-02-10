@@ -14,7 +14,7 @@ RedactorPlugins.iframely = function() {
                 if (e.keyCode === 13) {
                     var current = that.selection.getCurrent();
 
-                    while(current && current.noteType !== 3 && current.nodeName.toLowerCase() !== 'p') {
+                    while(current && current.nodeType !== 3 && current.nodeName.toLowerCase() !== 'p') {
                         current = current.parentNode;
                     }
 
