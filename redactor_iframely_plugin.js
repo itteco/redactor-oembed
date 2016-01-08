@@ -14,9 +14,11 @@
 				return String()
 				+ '<div class="modal-section" id="redactor-modal-iframely-insert">'
 					+ '<section>'
-						+ '<label>' + this.lang.get('iframely') + '</label>'
+						+ '<label>' + this.lang.get('enter-url') + '</label>'
 						+ '<input type="text" id="redactor-insert-iframely-area" />'
 					+ '</section>'
+                    + '<section id="redactor-modal-iframely-preview" style="display: none;">'
+                    + '</section>'
 					+ '<section>'
 						+ '<button id="redactor-modal-button-action">Insert</button>'
 						+ '<button id="redactor-modal-button-cancel">Cancel</button>'
@@ -25,6 +27,9 @@
             },
 
             init: function() {
+
+                this.iframely.cache = {};
+
                 var button = this.button.addAfter('image', 'iframely', this.lang.get('iframely'));
                 this.button.addCallback(button, this.iframely.show);
 
@@ -79,6 +84,9 @@
             },
 
             show: function() {
+
+                var that = this;
+
                 this.modal.addTemplate('iframely', this.iframely.getTemplate());
 
                 this.modal.load('iframely', this.lang.get('iframely'), 700);
@@ -87,42 +95,100 @@
                 this.modal.getActionButton().text(this.lang.get('insert')).on('click', this.iframely.insert);
                 this.modal.show();
 
+                var $input = $('#redactor-insert-iframely-area');
+
+                $input.keyup(this.iframely.preview);
+
                 // focus
                 if (this.detect.isDesktop()) {
                     setTimeout(function() {
-                        $('#redactor-insert-iframely-area').focus();
-
+                        $input.focus();
                     }, 1);
                 }
             },
 
-            insert: function() {
+            preview: function() {
 
-                var that = this;
-                var uri = $('#redactor-insert-iframely-area').val();
+                var $input = $('#redactor-insert-iframely-area');
+
+                var uri = $.trim($input.val());
+                var previousUri = $.trim($input.attr('data-previous-value'));
+
+                if (uri === previousUri) {
+                    return;
+                }
+
+                $input.removeAttr('data-preview-html');
+                $input.attr('data-previous-value', uri);
+
+                var $preview = $('#redactor-modal-iframely-preview');
+                $preview.text('Loading...').show();
 
                 this.iframely.fetchUrl(uri, function(error, html) {
 
                     if (error) {
 
-                        // TODO: show error.
+                        $preview.hide().html('');
 
                     } else {
 
-                        that.modal.close();
-                        that.placeholder.hide();
+                        // Store result for later use.
+                        $input.attr('data-preview-html', html);
 
-                        // buffer
-                        that.buffer.set();
-
-                        // insert
-                        that.air.collapsed();
-                        that.insert.html(html);
+                        $preview.html(html).show();
                     }
                 });
             },
 
+            insert: function() {
+
+                var that = this;
+                var $input = $('#redactor-insert-iframely-area');
+                var uri = $.trim($input.val());
+                var previewHtml = $input.attr('data-preview-html');
+
+                function insert(html) {
+                    that.modal.close();
+                    that.placeholder.hide();
+
+                    // buffer
+                    that.buffer.set();
+
+                    // insert
+                    that.air.collapsed();
+                    that.insert.html(html);
+                }
+
+                if (previewHtml) {
+
+                    insert(previewHtml);
+
+                } else {
+
+                    this.iframely.fetchUrl(uri, function(error, html) {
+
+                        if (error || !html) {
+
+                            var $preview = $('#redactor-modal-iframely-preview');
+                            $preview.text('Sorry, no embeds for this URL').show();
+
+                        } else {
+
+                            insert(html);
+                        }
+                    });
+                }
+            },
+
             fetchUrl: function(uri, cb) {
+
+                var that = this;
+
+                var data = that.iframely.cache[uri];
+
+                if (data) {
+                    return cb(data.error, data.html);
+                }
 
                 $.ajax({
                     url: this.opts.oembedEndpoint || 'http://open.iframe.ly/api/oembed',
@@ -133,18 +199,31 @@
                     },
                     success: function(data, textStatus, jqXHR) {
 
+                        var html;
+
                         if (data && data.html) {
-                            cb(null, data.html);
+                            html = data.html;
                         } else if (data && !data.html && data.type === 'photo' && data.url) {
-                            cb(null, '<img src="' + data.url + '" title="' + (data.title || data.url)  + '" alt="' + (data.title || data.url)  + '" />');
+                            html = '<img src="' + data.url + '" title="' + (data.title || data.url)  + '" alt="' + (data.title || data.url)  + '" />';
                         }
+
+                        that.iframely.cache[uri] = {
+                            html: html
+                        };
+
+                        cb(null, html);
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
                         console.error(jqXHR && jqXHR.responseText || textStatus);
 
                         // TODO: parse responseText.
+                        var error = jqXHR && jqXHR.responseText || textStatus;
 
-                        cb(jqXHR && jqXHR.responseText || textStatus);
+                        that.iframely.cache[uri] = {
+                            error: error
+                        };
+
+                        cb(error);
                     }
                 });
             }
