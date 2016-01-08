@@ -16,10 +16,6 @@ Please, see demo at [http://itteco.github.io/redactor-oembed/](http://itteco.git
 
 Example plugin setup configuration (except usual things):
 
-    <!-- Redactor's plugin -->
-
-    <!-- Setup plugin css. -->
-    <link rel="stylesheet" href="iframely.css" />
     <!-- Setup iframely redactor plugin. -->
     <script src="redactor_iframely_plugin.js"></script>
 
