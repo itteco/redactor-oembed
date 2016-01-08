@@ -1,16 +1,16 @@
-(function($)
-{
-    $.Redactor.prototype.iframely = function()
-    {
+(function($) {
+
+    $.Redactor.prototype.iframely = function() {
         return {
+
             langs: {
                 en: {
                     'iframely': 'Iframely',
                     'enter-url': 'Enter url to embed'
                 }
             },
-            getTemplate: function()
-            {
+
+            getTemplate: function() {
 				return String()
 				+ '<div class="modal-section" id="redactor-modal-iframely-insert">'
 					+ '<section>'
@@ -23,13 +23,62 @@
 					+ '</section>'
 				+ '</div>';
             },
-            init: function()
-            {
+
+            init: function() {
                 var button = this.button.addAfter('image', 'iframely', this.lang.get('iframely'));
                 this.button.addCallback(button, this.iframely.show);
+
+                this.core.element().on('linkify.callback.redactor', this.iframely.linkify);
             },
-            show: function()
-            {
+
+            linkify: function($elements) {
+
+                var that = this;
+
+                $elements.each(function(i, el) {
+
+                    var $el = $(el);
+                    if ($el.is('a')) {
+                        var uri = $el.attr('href');
+
+                        var otherParagraphElements = $el.parent().contents().filter(function() {
+                            var text = $.trim(this.textContent);
+                            if (text.length === 1 && text.charCodeAt(0) === 8203) {
+                                // Clear ZERO WIDTH SPACE.
+                                text = '';
+                            }
+                            if (text) {
+                                var href = this.getAttribute && this.getAttribute('href');
+                                if (href !== uri) {
+                                    // Paragraph has another links.
+                                    return true;
+                                }
+                                if (!href) {
+                                    // Paragraph has another text.
+                                    return true;
+                                }
+                            }
+                        });
+
+                        if (otherParagraphElements.length) {
+                            // Prevent insert inside paragraph with text.
+                            return;
+                        }
+
+                        that.iframely.fetchUrl(uri, function(error, html) {
+
+                            // buffer
+                            that.buffer.set();
+
+                            // insert
+                            that.air.collapsed();
+                            $el.parent().html(html);
+                        });
+                    }
+                });
+            },
+
+            show: function() {
                 this.modal.addTemplate('iframely', this.iframely.getTemplate());
 
                 this.modal.load('iframely', this.lang.get('iframely'), 700);
@@ -39,17 +88,16 @@
                 this.modal.show();
 
                 // focus
-                if (this.detect.isDesktop())
-                {
-                    setTimeout(function()
-                    {
+                if (this.detect.isDesktop()) {
+                    setTimeout(function() {
                         $('#redactor-insert-iframely-area').focus();
 
                     }, 1);
                 }
             },
-            insert: function()
-            {
+
+            insert: function() {
+
                 var that = this;
                 var uri = $('#redactor-insert-iframely-area').val();
 
