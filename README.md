@@ -6,6 +6,8 @@ This is a plugin for [Imperavi's Redactor](http://imperavi.com/redactor) editor 
 
 The plugin recognizes the http links in editor as the user types it and grabs embeds on the fly.
 
+Also there is 'Embed' button in the toolbar to open the dialog with url input and embed preview.
+
 You can either [self-host](https://github.com/itteco/iframely) Iframely, or get the API Key from the [hosted version](http://iframely.com). As a bonus of hosted version, Iframely also gives the responsive embed codes for over 1500 domains.
 
 ## Demo
