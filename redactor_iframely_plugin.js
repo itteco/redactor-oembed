@@ -17,7 +17,7 @@
 						+ '<label>' + this.lang.get('enter-url') + '</label>'
 						+ '<input type="text" id="redactor-insert-iframely-area" />'
 					+ '</section>'
-                    + '<section id="redactor-modal-iframely-preview">'
+                    + '<section id="redactor-modal-iframely-preview" style="max-height: 500px; overflow: auto;">'
                         + '&nbsp;'
                     + '</section>'
 					+ '<section>'
@@ -96,12 +96,19 @@
                 this.modal.getActionButton().text(this.lang.get('insert')).on('click', this.iframely.insert);
                 this.modal.show();
 
+                // Move modal to top.
+                setTimeout(function() {
+                    $(that.modal.getModal()).parent().css('margin-top', '16px');
+                }, 1);
+
                 var $input = $('#redactor-insert-iframely-area');
 
                 var keyupTimeout = null;
                 $input.keyup(function() {
 
                     if (keyupTimeout) {
+
+                        // Wait for next preview.
 
                         clearTimeout(keyupTimeout);
 
@@ -111,6 +118,8 @@
                         }, 1000);
 
                     } else {
+
+                        // First preview start immediately.
 
                         keyupTimeout = setTimeout(function() {
                             keyupTimeout = null;
