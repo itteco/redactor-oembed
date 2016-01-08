@@ -17,7 +17,7 @@
 						+ '<label>' + this.lang.get('enter-url') + '</label>'
 						+ '<input type="text" id="redactor-insert-iframely-area" />'
 					+ '</section>'
-                    + '<section id="redactor-modal-iframely-preview" style="max-height: 500px; overflow: auto;">'
+                    + '<section id="redactor-modal-iframely-preview" style="overflow: auto;">'
                         + '&nbsp;'
                     + '</section>'
 					+ '<section>'
@@ -98,7 +98,14 @@
 
                 // Move modal to top.
                 setTimeout(function() {
-                    $(that.modal.getModal()).parent().css('margin-top', '16px');
+
+                    var $modalParent = $(that.modal.getModal()).parent();
+                    var previewHeight = $(window).height() - $modalParent.height() - 16;
+
+                    $modalParent.css('margin-top', '16px');
+
+                    $('#redactor-modal-iframely-preview').css('max-height', previewHeight + 'px');
+
                 }, 1);
 
                 var $input = $('#redactor-insert-iframely-area');
