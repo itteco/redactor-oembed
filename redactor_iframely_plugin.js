@@ -5,8 +5,8 @@
 
             langs: {
                 en: {
-                    'iframely': 'Iframely',
-                    'enter-url': 'Enter url to embed'
+                    'iframely': 'Embed',
+                    'enter-url': 'Enter URL you want to embed'
                 }
             },
 
@@ -17,7 +17,8 @@
 						+ '<label>' + this.lang.get('enter-url') + '</label>'
 						+ '<input type="text" id="redactor-insert-iframely-area" />'
 					+ '</section>'
-                    + '<section id="redactor-modal-iframely-preview" style="display: none;">'
+                    + '<section id="redactor-modal-iframely-preview">'
+                        + '&nbsp;'
                     + '</section>'
 					+ '<section>'
 						+ '<button id="redactor-modal-button-action">Insert</button>'
@@ -97,7 +98,27 @@
 
                 var $input = $('#redactor-insert-iframely-area');
 
-                $input.keyup(this.iframely.preview);
+                var keyupTimeout = null;
+                $input.keyup(function() {
+
+                    if (keyupTimeout) {
+
+                        clearTimeout(keyupTimeout);
+
+                        keyupTimeout = setTimeout(function() {
+                            that.iframely.preview();
+                            keyupTimeout = null;
+                        }, 1000);
+
+                    } else {
+
+                        keyupTimeout = setTimeout(function() {
+                            keyupTimeout = null;
+                        }, 1000);
+
+                        that.iframely.preview();
+                    }
+                });
 
                 // focus
                 if (this.detect.isDesktop()) {
@@ -122,13 +143,18 @@
                 $input.attr('data-previous-value', uri);
 
                 var $preview = $('#redactor-modal-iframely-preview');
-                $preview.text('Loading...').show();
+
+                var loadingTimeout = setTimeout(function() {
+                    $preview.text('Loading...');
+                }, 1500);
 
                 this.iframely.fetchUrl(uri, function(error, html) {
 
-                    if (error) {
+                    clearTimeout(loadingTimeout);
 
-                        $preview.hide().html('');
+                    if (error || !html) {
+
+                        $preview.html('&nbsp;');
 
                     } else {
 
@@ -170,7 +196,7 @@
                         if (error || !html) {
 
                             var $preview = $('#redactor-modal-iframely-preview');
-                            $preview.text('Sorry, no embeds for this URL').show();
+                            $preview.text('Sorry, no embeds for this URL');
 
                         } else {
 
@@ -181,6 +207,10 @@
             },
 
             fetchUrl: function(uri, cb) {
+
+                if (!uri.match(/(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)\.(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/i)) {
+                    return cb();
+                }
 
                 var that = this;
 
