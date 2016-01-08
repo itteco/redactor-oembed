@@ -161,7 +161,7 @@
                         // Store result for later use.
                         $input.attr('data-preview-html', html);
 
-                        $preview.html(html).show();
+                        $preview.html(html);
                     }
                 });
             },
@@ -240,6 +240,8 @@
                         that.iframely.cache[uri] = {
                             html: html
                         };
+
+                        html = '<div data-oembed-url="' + uri + '">' + html + '</div>';
 
                         cb(null, html);
                     },
