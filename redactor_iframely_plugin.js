@@ -5,8 +5,8 @@
 
             langs: {
                 en: {
-                    'iframely': 'Iframely',
-                    'enter-url': 'Enter url to embed'
+                    'iframely': 'Embed',
+                    'enter-url': 'Enter URL you want to embed'
                 }
             },
 
@@ -17,7 +17,8 @@
 						+ '<label>' + this.lang.get('enter-url') + '</label>'
 						+ '<input type="text" id="redactor-insert-iframely-area" />'
 					+ '</section>'
-                    + '<section id="redactor-modal-iframely-preview" style="display: none;">'
+                    + '<section id="redactor-modal-iframely-preview" style="max-height: 500px; overflow: auto;">'
+                        + '&nbsp;'
                     + '</section>'
 					+ '<section>'
 						+ '<button id="redactor-modal-button-action">Insert</button>'
@@ -95,9 +96,38 @@
                 this.modal.getActionButton().text(this.lang.get('insert')).on('click', this.iframely.insert);
                 this.modal.show();
 
+                // Move modal to top.
+                setTimeout(function() {
+                    $(that.modal.getModal()).parent().css('margin-top', '16px');
+                }, 1);
+
                 var $input = $('#redactor-insert-iframely-area');
 
-                $input.keyup(this.iframely.preview);
+                var keyupTimeout = null;
+                $input.keyup(function() {
+
+                    if (keyupTimeout) {
+
+                        // Wait for next preview.
+
+                        clearTimeout(keyupTimeout);
+
+                        keyupTimeout = setTimeout(function() {
+                            that.iframely.preview();
+                            keyupTimeout = null;
+                        }, 1000);
+
+                    } else {
+
+                        // First preview start immediately.
+
+                        keyupTimeout = setTimeout(function() {
+                            keyupTimeout = null;
+                        }, 1000);
+
+                        that.iframely.preview();
+                    }
+                });
 
                 // focus
                 if (this.detect.isDesktop()) {
@@ -122,20 +152,25 @@
                 $input.attr('data-previous-value', uri);
 
                 var $preview = $('#redactor-modal-iframely-preview');
-                $preview.text('Loading...').show();
+
+                var loadingTimeout = setTimeout(function() {
+                    $preview.text('Loading...');
+                }, 1500);
 
                 this.iframely.fetchUrl(uri, function(error, html) {
 
-                    if (error) {
+                    clearTimeout(loadingTimeout);
 
-                        $preview.hide().html('');
+                    if (error || !html) {
+
+                        $preview.html('&nbsp;');
 
                     } else {
 
                         // Store result for later use.
                         $input.attr('data-preview-html', html);
 
-                        $preview.html(html).show();
+                        $preview.html(html);
                     }
                 });
             },
@@ -170,7 +205,7 @@
                         if (error || !html) {
 
                             var $preview = $('#redactor-modal-iframely-preview');
-                            $preview.text('Sorry, no embeds for this URL').show();
+                            $preview.text('Sorry, no embeds for this URL');
 
                         } else {
 
@@ -181,6 +216,10 @@
             },
 
             fetchUrl: function(uri, cb) {
+
+                if (!uri.match(/(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)\.(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/i)) {
+                    return cb();
+                }
 
                 var that = this;
 
@@ -210,6 +249,8 @@
                         that.iframely.cache[uri] = {
                             html: html
                         };
+
+                        html = '<div data-oembed-url="' + uri + '">' + html + '</div>';
 
                         cb(null, html);
                     },
