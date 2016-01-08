@@ -16,24 +16,17 @@ Please, see demo at [http://itteco.github.io/redactor-oembed/](http://itteco.git
 
 Example plugin setup configuration (except usual things):
 
-    <!-- Redactor's plugin -->
-
-    <!-- Setup plugin css. -->
-    <link rel="stylesheet" href="iframely.css" />
     <!-- Setup iframely redactor plugin. -->
-    <script src="iframely.js"></script>
+    <script src="redactor_iframely_plugin.js"></script>
 
     <!-- Call Redactor -->
     <script type="text/javascript">
         $(document).ready(function() {
             $('#redactor').redactor({
-                focus: true,
+                // Add 'iframely' to plugins.
                 plugins: ['iframely'],
 
-                // Disable trunc links.
-                linkSize: 1000,
-
-                // Setup your iframely endpoint path. The sample is given for cloud version
+                // Setup your iframely endpoint path. The sample is given for cloud version.
                 oembedEndpoint: 'http://iframe.ly/api/oembed?api_key={YOUR API KEY HERE}'
             });
         });

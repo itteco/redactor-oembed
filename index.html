@@ -5,10 +5,10 @@
 
     <meta charset="utf-8">
 
-    <link rel="stylesheet" href="http://imperavi.com/js/redactor/redactor.css" />
+    <link rel="stylesheet" href="https://imperavi.com/assets/js/redactor/redactor.css" />
 
     <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
-    <script src="http://imperavi.com/js/redactor/redactor.js"></script>
+    <script src="https://imperavi.com/assets/js/redactor/redactor.js"></script>
 
     <!-- Redactor's plugin -->
 
@@ -20,9 +20,7 @@
 
         $(document).ready(function() {
             $('#redactor').redactor({
-                focus: true,
                 plugins: ['iframely'],                              // Enable plugin.
-                linkSize: 1000,                                     // Disable trunc links.
                 oembedEndpoint: 'http://open.iframe.ly/api/oembed'  // Set your embed endpoint, e.g. 'http://iframe.ly/api/oembed?api_key={YOUR API KEY HERE}';
             });
         });
