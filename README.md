@@ -1,22 +1,18 @@
 # Iframely plugin for Redactor
 
-## About
+This plugin adds oEmbed support for [Imperavi's Redactor](http://imperavi.com/redactor) via Iframely API. It providers responsive rich media and image embeds via [Iframely API](http://iframely.com) endpoint, that supports [over 1800](https://iframely.com/domains) publishers and summary cards for the rest of the web. 
 
-This is a plugin for [Imperavi's Redactor](http://imperavi.com/redactor) editor that allows rich media and image embeds via oEmbed with default API at [Iframely](http://iframely.com) endpoint. 
+You will get YouTube, Twitter, Facebook, Tumblr, Vimeo, SoundCloud, Flickr, Google Maps, GfyCat, Giphy, Imgur, Vimeo - all the usual suspects plus thousands more.
 
-The plugin recognizes the http links in editor as the user types it and grabs embeds on the fly.
-
-Also there is 'Embed' button in the toolbar to open the dialog with url input and embed preview.
-
-You can either [self-host](https://github.com/itteco/iframely) Iframely, or get the API Key from the [hosted version](http://iframely.com). As a bonus of hosted version, Iframely also gives the responsive embed codes for over 1500 domains.
+You will need to define oEmbed API endpoint in your settings, see below. For Iframely version, get your API key at [iframely.com](https://iframely.com)
 
 ## Demo
 
-Please, see demo at [http://itteco.github.io/redactor-oembed/](http://itteco.github.io/redactor-oembed/)
+Check out the simple plugin's demo on [Imperavi website](https://imperavi.com/redactor/plugins/iframely/).
 
-## Sample & Config
+Get embeds through the dialog via 'Embed' button in Redactor's toolbar. The plugin also tries to recognize http links on a separate in editor as author types it.
 
-Example plugin setup configuration (except usual things):
+## Configure the plugin with API endpoint
 
     <!-- Setup iframely redactor plugin. -->
     <script src="redactor_iframely_plugin.js"></script>
@@ -29,12 +25,13 @@ Example plugin setup configuration (except usual things):
                 plugins: ['iframely'],
 
                 // Setup your iframely endpoint path. The sample is given for cloud version.
-                oembedEndpoint: 'http://iframe.ly/api/oembed?api_key={YOUR API KEY HERE}'
+                oembedEndpoint: '//iframe.ly/api/oembed?api_key={YOUR API KEY HERE}'
             });
         });
     </script>
 
-Please, change all links to Redactor and Iframely to your own values. The links given here are just for demo purposes.
+Get your Iframely API key at [iframely.com](https://iframely.com). You can also point the plugin to the [self-hosted Iframely](https://github.com/itteco/iframely) version.
+
 
 ## License & Contributing
 
