@@ -35,6 +35,18 @@
                 this.button.addCallback(button, this.iframely.show);
 
                 this.core.element().on('linkify.callback.redactor', this.iframely.linkify);
+                this.core.element().on('syncBefore.callback.redactor', this.iframely.syncBefore);
+            },
+
+            syncBefore: function(html) {
+                // Restore original embed code from embed wrapper attribute value.
+                var $data = $('<div>').html(html);
+                $data.find('[data-embed-code]').each(function() {
+                    var $this = $(this);
+                    $this.html($this.attr('data-embed-code'));
+                });
+
+                return $data.html();
             },
 
             linkify: function($elements) {
@@ -257,7 +269,17 @@
                             html: html
                         };
 
-                        html = '<div data-oembed-url="' + uri + '">' + html + '</div>';
+                        var $div = $('<div>')
+                            .attr('data-oembed-url', uri)
+                            .html(html);
+
+                        if (html && html.indexOf('</script>') > -1) {
+                            // Store embed code with <script> tag inside wrapper attribute value.
+                            // Make nice attribute value escaping using jQuery.
+                            $div.attr('data-embed-code', html);
+                        }
+
+                        html = $('<div>').append($div).html();
 
                         cb(null, html);
                     },
