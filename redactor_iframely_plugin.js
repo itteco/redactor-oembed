@@ -271,13 +271,8 @@
 
                         var $div = $('<div>')
                             .attr('data-oembed-url', uri)
+                            .attr('data-embed-code', html)
                             .html(html);
-
-                        if (html && html.indexOf('</script>') > -1) {
-                            // Store embed code with <script> tag inside wrapper attribute value.
-                            // Make nice attribute value escaping using jQuery.
-                            $div.attr('data-embed-code', html);
-                        }
 
                         html = $('<div>').append($div).html();
 
