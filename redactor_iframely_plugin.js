@@ -85,12 +85,25 @@
 
                         that.iframely.fetchUrl(uri, function(error, html) {
 
+                            if (error || !html) {
+                                // Skip iframely linkify.
+                                return;
+                            }
+
                             // buffer
                             that.buffer.set();
 
                             // insert
                             that.air.collapsed();
-                            $el.parent().html(html);
+
+                            // remove current link
+                            $el.remove();
+
+                            var $node = $(html);
+                            that.insert.node($node);
+
+                            // place cursor after inserted node
+                            that.caret.after($node);
                         });
                     }
                 });
@@ -270,16 +283,18 @@
                             html = '<img src="' + data.url + '" title="' + (data.title || data.url)  + '" alt="' + (data.title || data.url)  + '" />';
                         }
 
+                        if (html) {
+                            var $div = $('<div>')
+                                .attr('data-oembed-url', uri)
+                                .attr('data-embed-code', html)
+                                .html(html);
+
+                            html = $('<div>').append($div).html();
+                        }
+
                         that.iframely.cache[uri] = {
                             html: html
                         };
-
-                        var $div = $('<div>')
-                            .attr('data-oembed-url', uri)
-                            .attr('data-embed-code', html)
-                            .html(html);
-
-                        html = $('<div>').append($div).html();
 
                         cb(null, html);
                     },
