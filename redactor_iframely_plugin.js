@@ -210,7 +210,12 @@
 
                     // insert
                     that.air.collapsed();
-                    that.insert.html(html);
+
+                    var $node = $(html);
+                    that.insert.node($node);
+
+                    // place cursor after inserted node
+                    that.caret.after($node);
                 }
 
                 if (previewHtml) {
