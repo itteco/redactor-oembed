@@ -30,7 +30,9 @@ Get embeds through the dialog via 'Embed' button in Redactor's toolbar. The plug
         });
     </script>
 
-Get your Iframely API key at [iframely.com](https://iframely.com). You can also point the plugin to the [self-hosted Iframely](https://github.com/itteco/iframely) version.
+Get your Iframely API key at [iframely.com](https://iframely.com). You can also configure any other [API parameters](https://iframely.com/docs/parameters) in your oembedEndpoint.
+
+To fix Redactor styles issues when you stroke backspace, configure `oembedEndpoint` with `&omit_css=1` and [add requires Iframely styles](https://iframely.com/docs/omit-css) to your page yourself: 
 
 
 ## License & Contributing
