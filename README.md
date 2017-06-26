@@ -8,7 +8,7 @@ You will need to define oEmbed API endpoint in your settings, see below. For Ifr
 
 ## Demo
 
-Check out the simple plugin's demo on [Imperavi website](https://imperavi.com/redactor/plugins/iframely/).
+Check out the simple plugin's demo on [http://itteco.github.io/redactor-oembed/](http://itteco.github.io/redactor-oembed/).
 
 Get embeds through the dialog via 'Embed' button in Redactor's toolbar. The plugin also tries to recognize http links on a separate in editor as author types it.
 
